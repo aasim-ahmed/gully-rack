@@ -1,0 +1,238 @@
+@import "tailwindcss";
+
+/*
+ * GULLY RACK design system — "Night Edition".
+ * Black-first editorial streetwear: oversized Poppins, Instrument Serif italic accents,
+ * electric blue used sparingly as a signal colour.
+ * The default Tailwind palette is cleared so only brand colours can be used.
+ * Shades come from opacity modifiers (text-white/60, border-ink/10 …).
+ */
+@theme {
+  --color-*: initial;
+  --color-blue: #087ff5;
+  --color-ink: #050505;
+  --color-graphite: #171717;
+  --color-mist: #f2f2f2;
+  --color-white: #ffffff;
+  /* Functional state colour, used only for form errors. */
+  --color-danger: #e5484d;
+
+  --font-sans: "Poppins", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Instrument Serif", "Times New Roman", Georgia, serif;
+
+  /* Display scale — type is a layout element, so it scales with the viewport. */
+  --text-display: clamp(3.4rem, 13.5vw, 15rem);
+  --text-display--line-height: 0.82;
+  --text-mega: clamp(4rem, 19vw, 22rem);
+  --text-mega--line-height: 0.78;
+
+  --tracking-tightest: -0.055em;
+
+  --breakpoint-xs: 30rem;
+
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  --animate-shimmer: shimmer 1.4s linear infinite;
+  --animate-scroll-cue: scroll-cue 2.2s var(--ease-in-out-quart) infinite;
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  @keyframes scroll-cue {
+    0% { transform: scaleY(0); transform-origin: top; }
+    45% { transform: scaleY(1); transform-origin: top; }
+    55% { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-white font-sans text-ink;
+    font-weight: 450;
+  }
+
+  ::selection {
+    @apply bg-blue text-white;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-blue);
+    outline-offset: 3px;
+  }
+
+  button,
+  [role="button"],
+  select {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  img {
+    -webkit-user-drag: none;
+  }
+
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-[1680px] px-4 sm:px-6 lg:px-10;
+  }
+
+  /* Small mono-like campaign labels: "N°07", "SS/26", "[ Drop ]" */
+  .eyebrow {
+    @apply text-[10px] font-semibold tracking-[0.28em] uppercase sm:text-[11px];
+  }
+  .label {
+    @apply text-[10px] font-medium tracking-[0.18em] uppercase tabular-nums;
+  }
+
+  /* Editorial italic — the human voice next to the shouting sans. */
+  .accent {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    text-transform: none;
+  }
+
+  .heading-xl {
+    @apply text-[2.6rem] font-extrabold tracking-tightest uppercase sm:text-6xl lg:text-7xl xl:text-8xl;
+    line-height: 0.88;
+  }
+
+  .heading-lg {
+    @apply text-3xl font-extrabold tracking-tighter uppercase sm:text-4xl lg:text-5xl;
+    line-height: 0.92;
+  }
+
+  /* Outline type used for layered headlines. */
+  .text-outline {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--color-ink);
+  }
+  .text-outline-white {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--color-white);
+  }
+  @media (min-width: 1024px) {
+    .text-outline,
+    .text-outline-white {
+      -webkit-text-stroke-width: 2px;
+    }
+  }
+
+  .field {
+    @apply h-12 w-full border-0 border-b border-ink/20 bg-transparent px-0 text-sm text-ink transition-colors outline-none placeholder:text-ink/35 focus:border-ink;
+  }
+  .field-box {
+    @apply h-12 w-full border border-ink/15 bg-white px-4 text-sm text-ink transition-colors outline-none placeholder:text-ink/40 focus:border-ink;
+  }
+
+  .field-error {
+    @apply border-danger focus:border-danger;
+  }
+
+  .skeleton {
+    background: linear-gradient(90deg, #f2f2f2 25%, #e8e8e8 37%, #f2f2f2 63%);
+    background-size: 400% 100%;
+    @apply animate-shimmer;
+  }
+  .skeleton-dark {
+    background: linear-gradient(90deg, #171717 25%, #222 37%, #171717 63%);
+    background-size: 400% 100%;
+    @apply animate-shimmer;
+  }
+
+  /* Animated underline: draws in from the left, leaves to the right. */
+  .link-underline {
+    position: relative;
+  }
+  .link-underline::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.45s var(--ease-out-expo);
+  }
+  .link-underline:hover::after,
+  .link-underline[aria-current="page"]::after,
+  .link-underline.is-active::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  /* Rolling text: the label slides up and a copy rolls in from below on hover. */
+  .roll {
+    display: inline-flex;
+    overflow: hidden;
+    position: relative;
+    vertical-align: top;
+  }
+  .roll > span {
+    display: block;
+    transition: transform 0.5s var(--ease-out-expo);
+  }
+  .roll > span + span {
+    position: absolute;
+    inset: 0;
+    transform: translateY(105%);
+  }
+  .group:hover .roll > span:first-child,
+  .roll:hover > span:first-child {
+    transform: translateY(-105%);
+  }
+  .group:hover .roll > span + span,
+  .roll:hover > span + span {
+    transform: translateY(0);
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Space for the mobile bottom bar, including the iOS home indicator. */
+  .pb-dock {
+    padding-bottom: calc(4rem + env(safe-area-inset-bottom));
+  }
+  @media (min-width: 1024px) {
+    .pb-dock {
+      padding-bottom: 0;
+    }
+  }
+}
